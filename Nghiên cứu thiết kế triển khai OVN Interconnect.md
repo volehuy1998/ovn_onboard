@@ -4,7 +4,7 @@
 
 ### Chuẩn bị
 
-![ovn-ic-setup-architecture](assets\ovn-ic-setup-architecture.png)
+![ovn-ic-setup-architecture](assets/ovn-ic-setup-architecture.png)
 
 Tạo 3 file sau:
 
@@ -70,7 +70,7 @@ $ systemctl enable --now ovn-ic@osp2.service
 
 Nghiệm thu kết quả:
 
-![ovn-ic-setup-status](assets\ovn-ic-setup-status.png)
+![ovn-ic-setup-status](assets/ovn-ic-setup-status.png)
 
 ```bash
 root@ovn-ic:~# systemctl status system-ovn\\x2dic.slice
@@ -495,7 +495,7 @@ root@osp2-ctl1:~#
 
 ### Tạo peer port từ giữa Transit Switch và Logical Router
 
-![creating_peer_port](assets\creating_peer_port.png)
+![creating_peer_port](assets/creating_peer_port.png)
 
 #### Tạo peer port từ OSP1 đến Transit Switch
 
@@ -596,7 +596,7 @@ root@osp2-ctl1:~#
 
 ### Chuẩn bị static route đối xứng
 
-![static_route_on_logical_router](assets\static_route_on_logical_router.png)
+![static_route_on_logical_router](assets/static_route_on_logical_router.png)
 
 #### Tạo static route từ OSP1 đến OSP2
 
@@ -632,7 +632,7 @@ root@osp2-ctl1:~#
 
 #### Compute (IC GW) đến Compute (IC GW)
 
-![ts-compute-to-compute](assets\ts-compute-to-compute.png)
+![ts-compute-to-compute](assets/ts-compute-to-compute.png)
 
 Thông tin rỗng tức là chưa có node nào đăng ký làm Interconnect Gateway:
 
@@ -745,7 +745,7 @@ root@ovn-ic:~#
 
 #### ComputeA (IC GW) đến NetworkB (IC GW), ComputeB
 
-![](assets\ts-compute-to-compute-via-network-node.png)
+![](assets/ts-compute-to-compute-via-network-node.png)
 
 Chuyển IC GW từ compute node sang network node
 
