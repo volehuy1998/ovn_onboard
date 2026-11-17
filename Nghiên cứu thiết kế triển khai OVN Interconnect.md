@@ -743,6 +743,12 @@ availability-zone osp2-rg1
 root@ovn-ic:~#
 ```
 
+Kết quả
+
+![](assets/ts-test-icmp-compute-to-compute.png)
+
+![](assets/ts-tcpdump-compute-to-compute.png)
+
 #### ComputeA (IC GW) đến NetworkB (IC GW), ComputeB
 
 ![](assets/ts-compute-to-compute-via-network-node.png)
@@ -805,3 +811,5 @@ availability-zone osp2-rg1
             address: ["02:00:00:00:02:01 169.254.100.2/24"]
 root@ovn-ic:~#
 ```
+
+![](assets/ts-test-icmp-compute-to-compute-via-network-node.png)
