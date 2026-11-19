@@ -657,7 +657,7 @@ root@osp2-ctl1:~#
 
 Thông tin rỗng tức là chưa có node nào đăng ký làm Interconnect Gateway:
 
-```
+```bash
 root@ovn-ic:~# ovn-ic-sbctl show
 availability-zone osp1-rg1
 availability-zone osp2-rg1
