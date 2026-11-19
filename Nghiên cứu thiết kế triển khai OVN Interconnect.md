@@ -107,7 +107,7 @@ root@ovn-ic:~#
 
 Tại node OVN-IC thực hiện tạo Transit Switch như sau:
 
-```
+```bash
 root@ovn-ic:~# ovn-ic-nbctl --wait=sb ts-add my-transit-switch
 root@ovn-ic:~# ovn-ic-nbctl --wait=sb ts-list
 d529ef21-87b2-408b-9e63-415c432edd64 (my-transit-switch)
@@ -366,8 +366,8 @@ tags: []
 updated_at: '2026-11-17T09:50:49Z'
 ```
 
-```
-openstack port list -f yaml --router osp1-router
+```bash
+$ openstack port list -f yaml --router osp1-router
 - Fixed IP Addresses:
   - ip_address: 192.168.10.1
     subnet_id: 529c7ad7-3a23-4f5d-8517-9a5ef0857cf9
@@ -406,7 +406,15 @@ root@osp1-ctl1:~#
 Tạo 1 port tại router để kết nối đến Transit Switch:
 
 ```bash
-root@osp1-ctl1:~# docker exec -it -u0 ovn_nb_db ovn-nbctl --no-leader-only lrp-add neutron-76b2099f-6fc7-4ba0-a06b-7800f4e8533c   lrp-osp1-to-switch-transit   02:00:00:00:01:01   169.254.100.1/24
+root@osp1-ctl1:~# docker exec -it -u0 ovn_nb_db ovn-nbctl --no-leader-only lrp-add \
+neutron-76b2099f-6fc7-4ba0-a06b-7800f4e8533c \
+	lrp-osp1-to-switch-transit \
+	02:00:00:00:01:01 
+	169.254.100.1/24
+root@osp2-ctl1:~#
+```
+
+```bash
 root@osp1-ctl1:~# docker exec -it -u0 ovn_nb_db ovn-nbctl --no-leader-only lrp-list neutron-76b2099f-6fc7-4ba0-a06b-7800f4e8533c
 e1dd6242-de4d-41d2-aa2f-63f3d1369661 (lrp-737095e0-1c55-4ab7-9fba-36415060f81e)
 57b8bfa3-6c65-4195-9fdd-a01b018e230c (lrp-osp1-to-switch-transit)
@@ -487,6 +495,9 @@ root@osp2-ctl1:~# docker exec -it -u0 ovn_nb_db ovn-nbctl lrp-add neutron-e49c2b
   02:00:00:00:02:01 \
   169.254.100.2/24
 root@osp2-ctl1:~#
+```
+
+```bash
 root@osp2-ctl1:~# docker exec -it -u0 ovn_nb_db ovn-nbctl --no-leader-only lrp-list neutron-e49c2bdf-2dbd-4235-b071-c41a2bf60a24
 dec2fb39-db7b-4ed9-94e1-0c996180b634 (lrp-0a8d36c9-98a8-46fb-8bce-80764958cc8c)
 9042af2d-8ed5-4faf-bea8-c5f0ce43d19b (lrp-osp2-to-switch-transit)
@@ -506,6 +517,10 @@ my-transit-switch lsp-osp1-transit-switch \
 	type=router \
     options:router-port=lrp-osp1-to-switch-transit \
     addresses=router
+root@osp1-ctl1:~#
+```
+
+```bash
 root@osp1-ctl1:~# docker exec -it -u0 ovn_nb_db ovn-nbctl --no-leader-only lrp-list \
 neutron-76b2099f-6fc7-4ba0-a06b-7800f4e8533c
 e1dd6242-de4d-41d2-aa2f-63f3d1369661 (lrp-737095e0-1c55-4ab7-9fba-36415060f81e)
@@ -555,7 +570,9 @@ my-transit-switch lsp-osp2-transit-switch \
     options:router-port=lrp-osp2-to-switch-transit \
     addresses=router
 root@osp2-ctl1:~#
-root@osp2-ctl1:~#
+```
+
+```bash
 root@osp2-ctl1:~# docker exec -it -u0 ovn_nb_db ovn-nbctl --no-leader-only lsp-list my-transit-switch
 f6002eec-b4de-4390-87f9-8c261929316f (lsp-osp1-transit-switch)
 8423e0a5-43bf-4f75-b618-54208308ea3c (lsp-osp2-transit-switch)
@@ -603,10 +620,12 @@ root@osp2-ctl1:~#
 ```bash
 root@osp1-ctl1:~# docker exec -it -u0 ovn_nb_db ovn-nbctl --no-leader-only lr-route-add \
 neutron-76b2099f-6fc7-4ba0-a06b-7800f4e8533c   192.168.20.0/24   169.254.100.2
+root@osp1-ctl1:~#
 ```
 
 ```bash
-root@osp1-ctl1:~# docker exec -it -u0 ovn_nb_db ovn-nbctl --no-leader-only lr-route-list neutron-76b2099f-6fc7-4ba0-a06b-7800f4e8533c
+root@osp1-ctl1:~# docker exec -it -u0 ovn_nb_db ovn-nbctl --no-leader-only lr-route-list \
+neutron-76b2099f-6fc7-4ba0-a06b-7800f4e8533c
 IPv4 Routes
 Route Table <main>:
           192.168.20.0/24             169.254.100.2 dst-ip
@@ -618,17 +637,19 @@ root@osp1-ctl1:~#
 ```bash
 root@osp2-ctl1:~# docker exec -it -u0 ovn_nb_db ovn-nbctl lr-route-add \
 neutron-e49c2bdf-2dbd-4235-b071-c41a2bf60a24   192.168.10.0/24   169.254.100.1
+root@osp2-ctl1:~#
 ```
 
 ```bash
-root@osp2-ctl1:~# docker exec -it -u0 ovn_nb_db ovn-nbctl lr-route-list neutron-e49c2bdf-2dbd-4235-b071-c41a2bf60a24
+root@osp2-ctl1:~# docker exec -it -u0 ovn_nb_db ovn-nbctl --no-leader-only lr-route-list \
+neutron-e49c2bdf-2dbd-4235-b071-c41a2bf60a24
 IPv4 Routes
 Route Table <main>:
           192.168.10.0/24             169.254.100.1 dst-ip
 root@osp2-ctl1:~#
 ```
 
-### Triển khai mô hình thông compute đến compute
+### Triển khai mô hình cơ bản
 
 #### Compute (IC GW) đến Compute (IC GW)
 
@@ -643,62 +664,37 @@ availability-zone osp2-rg1
 root@ovn-ic:~#
 ```
 
-Đăng ký trở thành IC Gateway:
+Đăng ký osp1-com1 trở thành IC Gateway:
 
 ```bash
 root@osp1-com1:~# docker exec -it -u0 openvswitch_vswitchd ovs-vsctl set open . external_ids:ovn-is-interconn=true
-```
-
-```bash
-root@osp1-com1:~# docker exec -it -u0 openvswitch_vswitchd ovs-vsctl get open . external_ids
-{hostname=osp1-com1, ovn-bridge-mappings="physnet1:br-ex", ovn-chassis-mac-mappings="physnet1:52:54:00:d3:ea:c4", ovn-encap-ip="172.28.20.21", ovn-encap-type=geneve, ovn-is-interconn="true", ovn-monitor-all="false", ovn-openflow-probe-interval="60", ovn-remote="tcp:172.28.10.11:16641,tcp:172.28.10.12:16641", ovn-remote-probe-interval="60000", system-id=osp1-com1}
 root@osp1-com1:~#
 ```
 
-Kiểm tra nếu không thấy local datapath (Transit Switch)
-
-```bash
-root@osp1-com1:~# docker exec -u0 ovn_controller ovs-appctl -t /run/ovn/ovn-controller.7.ctl debug/dump-local-datapaths
-Local datapaths:
-Datapath: neutron-66e2aa6a-7489-474d-a871-36a36d4a1a39, type: switch
-Datapath: neutron-76b2099f-6fc7-4ba0-a06b-7800f4e8533c, type: router
-Datapath: neutron-bf85477e-1b4f-4b4f-a754-a7dda452db58, type: switch
-Datapath: neutron-0ea1ba5e-597b-4888-b4bf-197f0cb2224e, type: router
-Datapath: my-transit-switch, type: switch
-Datapath: neutron-f9a4ddf8-a33c-4cd7-ace7-51a82dde4383, type: switch
-Datapath: neutron-8e23aa2b-ad52-4416-8d85-6c825d289a4c, type: router
-Datapath: neutron-5ab24903-b867-494a-9553-91a1574d035a, type: switch
-root@osp1-com1:~#
-```
+Kiểm tra local datapath (Transit Switch)
 
 ```bash
 root@osp1-ctl1:~# docker exec ovn_nb_db ovn-nbctl --no-leader-only lrp-set-gateway-chassis \
 lrp-osp1-to-switch-transit osp1-com1 1
 ```
 
-```bash
-root@osp1-ctl1:~# docker exec ovn_nb_db ovn-nbctl --no-leader-only lrp-get-gateway-chassis \
-lrp-osp1-to-switch-transit
-lrp-osp1-to-switch-transit-osp1-com1     1
-root@osp1-ctl1:~#
-```
-
-Đăng ký trở thành IC Gateway:
+Đăng ký osp2-com1 trở thành IC Gateway:
 
 ```bash
 root@osp2-com1:~# docker exec -it -u0 openvswitch_vswitchd ovs-vsctl set open . external_ids:ovn-is-interconn=true
+root@osp2-ctl1:~#
 ```
 
 ```bash
-root@osp2-com1:~# docker exec -it -u0 openvswitch_vswitchd ovs-vsctl get open . external_ids
-{hostname=osp2-com1, ovn-bridge-mappings="physnet1:br-ex", ovn-chassis-mac-mappings="physnet1:52:54:00:24:96:f4", ovn-encap-ip="172.28.21.21", ovn-encap-type=geneve, ovn-is-interconn="true", ovn-monitor-all="false", ovn-openflow-probe-interval="60", ovn-remote="tcp:172.28.11.11:16641", ovn-remote-probe-interval="60000", system-id=osp2-com1}
-root@osp2-com1:~#
+root@osp2-ctl1:~# docker exec ovn_nb_db ovn-nbctl --no-leader-only lrp-set-gateway-chassis \
+lrp-osp2-to-switch-transit osp2-com1 1
+root@osp2-ctl1:~#
 ```
 
 Kiểm tra local datapath (Transit Switch) trên compute node
 
 ```bash
-root@osp2-com1:~#  docker exec -u0 ovn_controller   ovs-appctl -t /run/ovn/ovn-controller.7.ctl   debug/dump-local-datapaths
+root@osp2-com1:~#  docker exec -u0 ovn_controller ovs-appctl -t /run/ovn/ovn-controller.7.ctl debug/dump-local-datapaths
 Local datapaths:
 Datapath: neutron-a157097c-75ff-4b72-9922-4536a6fbd662, type: switch
 Datapath: neutron-71bb20af-f9ae-4c8a-960e-e6556ba43f9d, type: switch
@@ -706,18 +702,6 @@ Datapath: neutron-e49c2bdf-2dbd-4235-b071-c41a2bf60a24, type: router
 Datapath: neutron-dce6198f-3d42-4b00-9788-e3542c3a8705, type: router
 Datapath: my-transit-switch, type: switch
 root@osp2-com1:~#
-```
-
-```bash
-root@osp2-ctl1:~# docker exec ovn_nb_db ovn-nbctl --no-leader-only lrp-set-gateway-chassis \
-lrp-osp2-to-switch-transit osp2-com1 1
-```
-
-```bash
-root@osp2-ctl1:~# docker exec ovn_nb_db ovn-nbctl --no-leader-only lrp-get-gateway-chassis \
-lrp-osp2-to-switch-transit
-lrp-osp2-to-switch-transit-osp2-com1     1
-root@osp2-ctl1:~#
 ```
 
 Đã có 2 node trở thành Interconnect Gateway:
@@ -765,20 +749,10 @@ root@osp2-ctl1:~# docker exec -it -u0 openvswitch_vswitchd ovs-vsctl set open . 
 root@osp2-ctl1:~#
 ```
 
-```bash
-root@osp2-ctl1:~# docker exec -it -u0 openvswitch_vswitchd ovs-vsctl get open . external_ids
-{hostname=osp2-ctl1, ovn-bridge-mappings="physnet1:br-ex", ovn-cms-options=enable-chassis-as-gw, ovn-encap-ip="172.28.21.11", ovn-encap-type=geneve, ovn-is-interconn="true", ovn-monitor-all="false", ovn-openflow-probe-interval="60", ovn-remote="tcp:172.28.11.11:16641", ovn-remote-probe-interval="60000", system-id=osp2-ctl1}
-root@osp2-ctl1:~#
-root@osp2-ctl1:~# docker exec ovn_nb_db ovn-nbctl --no-leader-only \
-lrp-get-gateway-chassis \
-lrp-osp2-to-switch-transit lrp-osp2-to-switch-transit-osp2-ctl1     1
-root@osp2-ctl1:~#
-```
-
 Kiểm tra local datapath (Transit Switch) trên network node
 
 ```bash
-root@osp2-ctl1:~# docker exec -u0 ovn_controller  ovs-appctl -t /run/ovn/ovn-controller.7.ctl  debug/dump-local-datapaths
+root@osp2-ctl1:~# docker exec -u0 ovn_controller ovs-appctl -t /run/ovn/ovn-controller.7.ctl debug/dump-local-datapaths
 Local datapaths:
 Datapath: neutron-a157097c-75ff-4b72-9922-4536a6fbd662, type: switch
 Datapath: neutron-667b07ac-9279-466a-a435-1ed29475bf58, type: switch
